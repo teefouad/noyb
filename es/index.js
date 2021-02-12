@@ -1,13 +1,14 @@
+import _extends from "@babel/runtime/helpers/esm/extends";
+
 /**
  * Returns type of a given object.
  * @param   {Any}       obj           Object to inspect for type.
  * @return  {String}                  Type of the given object.
  */
-export const getObjectType = (obj) => {
-  const typeString = Object.prototype.toString.call(obj);
+export var getObjectType = function getObjectType(obj) {
+  var typeString = Object.prototype.toString.call(obj);
   return typeString.toLowerCase().replace(/\[object\s|\]/g, '');
 };
-
 /**
  * Uses a string path to search for a direct property in an object and return its value or
  * replace it if a new value is provided.
@@ -19,43 +20,46 @@ export const getObjectType = (obj) => {
  * @return  {Object}                  Value of the property or a copy of the same object updated
  *                                    with the provided value.
  */
-export const findDirectPropInObject = (obj, prop, copyByRef = false, ...args) => {
-  const type = getObjectType(obj);
-  const shouldReplace = args.length > 0;
-  const value = args[0];
 
-  // cannot work with types other than arrays and objects
-  if (type !== 'array' && type !== 'object') {
-    return obj;
+export var findDirectPropInObject = function findDirectPropInObject(obj, prop, copyByRef) {
+  if (copyByRef === void 0) {
+    copyByRef = false;
   }
 
-  // start with a reference to the given object
-  let result = obj;
+  var type = getObjectType(obj);
+  var shouldReplace = (arguments.length <= 3 ? 0 : arguments.length - 3) > 0;
+  var value = arguments.length <= 3 ? undefined : arguments[3]; // cannot work with types other than arrays and objects
 
-  // de-reference, if that is required
+  if (type !== 'array' && type !== 'object') {
+    return obj;
+  } // start with a reference to the given object
+
+
+  var result = obj; // de-reference, if that is required
+
   if (!copyByRef) {
     if (type === 'array') {
-      result = [...obj];
+      result = [].concat(obj);
     }
 
     if (type === 'object') {
-      result = { ...obj };
+      result = _extends({}, obj);
     }
-  }
+  } // handle an empty prop name
 
-  // handle an empty prop name
+
   if (prop === '') {
     if (shouldReplace) {
       // trying to write to an empty path on an object or an array would
       // result in the same given object or array
       return result;
-    }
+    } // trying to read an empty path results in 'undefined' value
 
-    // trying to read an empty path results in 'undefined' value
+
     return undefined;
-  }
+  } // handle a wildcard
 
-  // handle a wildcard
+
   if (prop === '*') {
     if (shouldReplace) {
       if (type === 'array') {
@@ -64,13 +68,13 @@ export const findDirectPropInObject = (obj, prop, copyByRef = false, ...args) =>
             findDirectPropInObject(result, 0, true, value);
           }
         } else {
-          const { length } = result;
-
-          // traverse the array end-to-start to make sure splicing
+          var _result = result,
+              length = _result.length; // traverse the array end-to-start to make sure splicing
           // items does not affect the current index
-          result.forEach((item, index) => {
-            const itemIndex = length - 1 - index;
-            let itemValue = value;
+
+          result.forEach(function (item, index) {
+            var itemIndex = length - 1 - index;
+            var itemValue = value;
 
             if (getObjectType(value) === 'function') {
               itemValue = value(result[itemIndex]);
@@ -79,57 +83,56 @@ export const findDirectPropInObject = (obj, prop, copyByRef = false, ...args) =>
             if (itemValue === undefined) {
               findDirectPropInObject(result, itemIndex, true, undefined);
             } else {
-              const newResult = findDirectPropInObject(result, itemIndex, copyByRef, itemValue);
+              var newResult = findDirectPropInObject(result, itemIndex, copyByRef, itemValue);
               result[itemIndex] = newResult[itemIndex];
             }
           });
         }
-      } else
-      if (type === 'object') {
-        Object.keys(result).forEach(key => findDirectPropInObject(result, key, true, value));
+      } else if (type === 'object') {
+        Object.keys(result).forEach(function (key) {
+          return findDirectPropInObject(result, key, true, value);
+        });
       }
 
       return result;
-    }
-
-    // reading a wildcard on an array would return the values
+    } // reading a wildcard on an array would return the values
     // of the given array
+
+
     if (type === 'array') {
       return result;
-    }
-
-    // reading a wildcard on an object would return the values
+    } // reading a wildcard on an object would return the values
     // of the given object
+
+
     if (type === 'object') {
       return Object.values(result);
     }
-  }
+  } // handle other values
 
-  // handle other values
+
   if (shouldReplace) {
-    let replaceWith = value;
+    var replaceWith = value;
 
     if (getObjectType(replaceWith) === 'function') {
       replaceWith = replaceWith(result[prop]);
-    }
+    } // update the value then return the resulting object
 
-    // update the value then return the resulting object
+
     if (replaceWith === undefined && type === 'array') {
       result.splice(prop, 1);
-    } else
-    if (replaceWith === undefined && type === 'object') {
+    } else if (replaceWith === undefined && type === 'object') {
       delete result[prop];
     } else {
       result[prop] = replaceWith;
     }
 
     return result;
-  }
+  } // return the value of the prop
 
-  // return the value of the prop
+
   return result[prop];
 };
-
 /**
  * Uses a string path to search for a property in an object and return its value or
  * replace it if a new value is provided.
@@ -141,15 +144,22 @@ export const findDirectPropInObject = (obj, prop, copyByRef = false, ...args) =>
  * @return  {Object}                  Value of the property or a copy of the same object updated
  *                                    with the provided value.
  */
-export const findPropInObject = (obj, pathStr, copyByRef = false, ...args) => {
-  const type = getObjectType(obj);
-  const shouldReplace = args.length > 0;
-  const value = args[0];
 
-  // clean and convert the path string into an array
-  let path = pathStr.toString().replace(/^\[|\]$/g, ''); // remove starting and ending brackets
+export var findPropInObject = function findPropInObject(obj, pathStr, copyByRef) {
+  if (copyByRef === void 0) {
+    copyByRef = false;
+  }
+
+  var type = getObjectType(obj);
+  var shouldReplace = (arguments.length <= 3 ? 0 : arguments.length - 3) > 0;
+  var value = arguments.length <= 3 ? undefined : arguments[3]; // clean and convert the path string into an array
+
+  var path = pathStr.toString().replace(/^\[|\]$/g, ''); // remove starting and ending brackets
+
   path = path.replace(/\[|\]/g, '.'); // convert all brackets to dots
+
   path = path.replace(/\.{2,}/g, '.'); // remove dot duplications
+
   path = path.split('.'); // break the string at the dots
 
   if (path.length === 1) {
@@ -158,37 +168,36 @@ export const findPropInObject = (obj, pathStr, copyByRef = false, ...args) => {
     }
 
     return findDirectPropInObject(obj, path[0], copyByRef);
-  }
+  } // start with a reference to the given object
 
-  // start with a reference to the given object
-  let result = obj;
 
-  // de-reference, if that is required
+  var result = obj; // de-reference, if that is required
+
   if (!copyByRef) {
     if (type === 'array') {
-      result = [...obj];
+      result = [].concat(obj);
     }
 
     if (type === 'object') {
-      result = { ...obj };
+      result = _extends({}, obj);
     }
   }
 
-  const prop = path[0];
-  const remainingPath = path.slice(1).join('.');
+  var prop = path[0];
+  var remainingPath = path.slice(1).join('.');
 
   if (shouldReplace) {
     // if the current path component is a wildcard, each item would have
     // to be mapped with value returned from the remaining path
     if (prop === '*') {
       if (type === 'array') {
-        result.forEach((item, index) => {
+        result.forEach(function (item, index) {
           result[index] = findPropInObject(item, remainingPath, copyByRef, value);
         });
       }
 
       if (type === 'object') {
-        Object.keys(result).forEach((key) => {
+        Object.keys(result).forEach(function (key) {
           result[key] = findPropInObject(result[key], remainingPath, copyByRef, value);
         });
       }
@@ -201,86 +210,88 @@ export const findPropInObject = (obj, pathStr, copyByRef = false, ...args) => {
     }
 
     result[prop] = findPropInObject(result[prop], remainingPath, copyByRef, value);
-
     return result;
-  }
-
-  // if the current path component is a wildcard, each item would have
+  } // if the current path component is a wildcard, each item would have
   // to be mapped with value returned from the remaining path
+
+
   if (prop === '*') {
     if (type === 'array') {
-      return result.map(item => findPropInObject(item, remainingPath, copyByRef));
+      return result.map(function (item) {
+        return findPropInObject(item, remainingPath, copyByRef);
+      });
     }
 
     if (type === 'object') {
-      return Object.values(result).map(item => findPropInObject(item, remainingPath, copyByRef));
+      return Object.values(result).map(function (item) {
+        return findPropInObject(item, remainingPath, copyByRef);
+      });
     }
-  }
-
-  // the `|| {}` part handles undefined values, it will return `undefined` instead
+  } // the `|| {}` part handles undefined values, it will return `undefined` instead
   // of throwing an error
+
+
   return findPropInObject(result[prop] || {}, remainingPath, copyByRef);
 };
-
 /**
  * Queries an object for a specific value.
  * @param   {String}    query   Query string.
  * @param   {Object}    object  Object to query.
  * @return  {Object}            The object, part of it or a value in the object.
  */
-export const queryObject = (query, obj) => {
+
+export var queryObject = function queryObject(query, obj) {
   // handle query strings
   if (getObjectType(query) === 'string') {
     return findPropInObject(obj, query);
-  }
+  } // handle query objects
 
-  // handle query objects
+
   if (getObjectType(query) === 'object') {
-    return Object.keys(query).reduce((prev, next) => ({
-      ...prev,
-      [next]: findPropInObject(obj, query[next]),
-    }), {});
+    return Object.keys(query).reduce(function (prev, next) {
+      var _extends2;
+
+      return _extends({}, prev, (_extends2 = {}, _extends2[next] = findPropInObject(obj, query[next]), _extends2));
+    }, {});
   }
 
   return obj;
 };
-
 /**
  * Updates an object by merging a fragment object into it.
  * @param   {Object} objA Object to update.
  * @param   {Object} objB Fragment object.
  * @return  {Object}      The updated object.
  */
-export const mergeObjects = (objA, objB) => Object.keys(objB).reduce(
-  (prev, next) => findPropInObject(prev, next, false, objB[next]),
-  { ...objA },
-);
 
+export var mergeObjects = function mergeObjects(objA, objB) {
+  return Object.keys(objB).reduce(function (prev, next) {
+    return findPropInObject(prev, next, false, objB[next]);
+  }, _extends({}, objA));
+};
 /**
  * Deep-copies an object or an array.
  * @param   {Object|Array}  obj       Object or Array to copy.
  * @return  {Object|Array}            Copied Object or Array.
  */
-export const deepCopy = (obj) => {
-  const type = getObjectType(obj);
+
+export var deepCopy = function deepCopy(obj) {
+  var type = getObjectType(obj);
 
   if (type === 'object' || type === 'array') {
-    const newObj = (type === 'array' ? [] : {});
-
-    Object.keys(obj).forEach((key) => {
+    var newObj = type === 'array' ? [] : {};
+    Object.keys(obj).forEach(function (key) {
       if (['object', 'array'].includes(getObjectType(obj[key]))) {
         newObj[key] = deepCopy(obj[key]);
       } else {
         newObj[key] = obj[key];
       }
     });
-
     return newObj;
   }
 
   return obj;
 };
-
 /**
  * Deeply compares two objects and returns a boolean that specifies whether the two
  * objects are equal
@@ -288,18 +299,18 @@ export const deepCopy = (obj) => {
  * @param   {Object | Array} objB Second object.
  * @return  {Boolean}             Result is true if the two objects are equal.
  */
-export const deepCompare = (objA, objB) => {
-  const typeA = getObjectType(objA);
-  const typeB = getObjectType(objB);
 
+export var deepCompare = function deepCompare(objA, objB) {
+  var typeA = getObjectType(objA);
+  var typeB = getObjectType(objB);
   if (typeA !== typeB) return false;
 
   if (typeA === 'object' || typeA === 'array') {
-    const keys = Object.keys(objA);
+    var keys = Object.keys(objA);
 
-    for (let i = 0; i < keys.length; i += 1) {
-      const valueA = objA[keys[i]];
-      const valueB = objB[keys[i]];
+    for (var i = 0; i < keys.length; i += 1) {
+      var valueA = objA[keys[i]];
+      var valueB = objB[keys[i]];
 
       if (!deepCompare(valueA, valueB)) {
         return false;
@@ -307,25 +318,26 @@ export const deepCompare = (objA, objB) => {
     }
   }
 
-  return objA?.toString() === objB?.toString();
+  return (objA == null ? void 0 : objA.toString()) === (objB == null ? void 0 : objB.toString());
 };
-
 /**
  * Fills an object with default values
  * @param {*} settings Settings object to be filled
  * @param {*} defaults Default values object
  */
-export const applyDefaults = (settings = {}, defaults = {}) => Object.keys({
-  ...settings,
-  ...defaults,
-}).reduce(
-  (p, n) => {
-    const value = getObjectType(settings[n]) !== 'undefined';
-    const defaultValue = getObjectType(defaults[n]) === 'object' ? applyDefaults(settings[n], defaults[n]) : defaults[n];
-    return ({
-      ...p,
-      [n]: value ? settings[n] : defaultValue,
-    });
-  },
-  {},
-);
+
+export var applyDefaults = function applyDefaults(settings, defaults) {
+  if (settings === void 0) {
+    settings = {};
+  }
+
+  if (defaults === void 0) {
+    defaults = {};
+  }
+
+  return Object.keys(defaults).reduce(function (p, n) {
+    var _settings$n, _extends3;
+
+    return _extends({}, p, (_extends3 = {}, _extends3[n] = getObjectType(defaults[n]) === 'object' ? applyDefaults(settings[n], defaults[n]) : (_settings$n = settings[n]) != null ? _settings$n : defaults[n], _extends3));
+  }, {});
+};

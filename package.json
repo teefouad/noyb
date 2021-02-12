@@ -1,35 +1,61 @@
 {
-  "name": "query-object",
-  "version": "0.1.0",
+  "name": "noyb",
+  "version": "0.1.1",
   "description": "",
   "main": "lib/index.js",
+  "unpkg": "dist/object-helpers.js",
+  "module": "es/index.js",
   "scripts": {
-    "start": "parcel serve index.html -p 3000",
-    "build": "npm run clean && parcel build src/index.js -o bundle.min.js",
-    "clean": "rimraf lib dist",
+    "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:es": "babel src --out-dir es",
+    "build:umd": "cross-env NODE_ENV=development rollup -c -o dist/object-helpers.js",
+    "build:umd:min": "cross-env NODE_ENV=production rollup -c -o dist/object-helpers.min.js",
+    "clean": "rimraf lib dist es",
     "lint": "eslint src --ext .js,.jsx",
-    "test": "jest",
+    "test": "jest tests",
+    "test:watch": "npm test -- --watch",
     "coverage": "npm test -- --coverage",
-    "posttest": "npm run lint",
-    "prepublishOnly": "npm test && npm run build"
+    "pretest": "npm run lint",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/teefouad/query-object.git"
+    "url": "git+https://github.com/teefouad/object-helpers.git"
   },
   "files": [
+    "lib",
     "src",
-    "dist"
+    "dist",
+    "es"
+  ],
+  "keywords": [
+    "javascript",
+    "nodejs"
   ],
   "author": "Mostafa <tee.fouad@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/teefouad/query-object/issues"
+    "url": "https://github.com/teefouad/object-helpers/issues"
   },
-  "homepage": "https://github.com/teefouad/query-object#readme",
+  "homepage": "https://github.com/teefouad/object-helpers#readme",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.3.4",
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-replace": "^2.3.4",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.6.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.4.0",
+    "babel-jest": "^26.6.3",
+    "babel-loader": "^8.0.6",
     "coveralls": "^3.0.3",
     "cross-env": "^5.2.0",
     "eslint": "^5.15.1",
@@ -37,7 +63,11 @@
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
-    "jest": "latest",
-    "parcel": "latest"
+    "jest": "^26.6.3",
+    "rollup": "^2.35.1",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.12.5"
   }
 }
