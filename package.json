@@ -1,0 +1,43 @@
+{
+  "name": "query-object",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "parcel serve index.html -p 3000",
+    "build": "npm run clean && parcel build src/index.js -o bundle.min.js",
+    "clean": "rimraf lib dist",
+    "lint": "eslint src --ext .js,.jsx",
+    "test": "jest",
+    "coverage": "npm test -- --coverage",
+    "posttest": "npm run lint",
+    "prepublishOnly": "npm test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teefouad/query-object.git"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "author": "Mostafa <tee.fouad@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/teefouad/query-object/issues"
+  },
+  "homepage": "https://github.com/teefouad/query-object#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.4.0",
+    "coveralls": "^3.0.3",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "jest": "latest",
+    "parcel": "latest"
+  }
+}
