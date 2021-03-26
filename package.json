@@ -1,16 +1,16 @@
 {
   "name": "noyb",
-  "version": "0.1.1",
+  "version": "0.1.5",
   "description": "",
   "main": "lib/index.js",
-  "unpkg": "dist/object-helpers.js",
+  "unpkg": "dist/noyb.js",
   "module": "es/index.js",
   "scripts": {
     "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "babel src --out-dir es",
-    "build:umd": "cross-env NODE_ENV=development rollup -c -o dist/object-helpers.js",
-    "build:umd:min": "cross-env NODE_ENV=production rollup -c -o dist/object-helpers.min.js",
+    "build:umd": "cross-env NODE_ENV=development rollup -c -o dist/noyb.js",
+    "build:umd:min": "cross-env NODE_ENV=production rollup -c -o dist/noyb.min.js",
     "clean": "rimraf lib dist es",
     "lint": "eslint src --ext .js,.jsx",
     "test": "jest tests",
@@ -21,13 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/teefouad/object-helpers.git"
+    "url": "git+https://github.com/teefouad/noyb.git"
   },
   "files": [
     "lib",
     "src",
     "dist",
-    "es"
+    "es",
+    "index.d.ts"
   ],
   "keywords": [
     "javascript",
@@ -36,9 +37,9 @@
   "author": "Mostafa <tee.fouad@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/teefouad/object-helpers/issues"
+    "url": "https://github.com/teefouad/noyb/issues"
   },
-  "homepage": "https://github.com/teefouad/object-helpers#readme",
+  "homepage": "https://github.com/teefouad/noyb#readme",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
