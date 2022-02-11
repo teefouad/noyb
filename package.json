@@ -1,6 +1,6 @@
 {
   "name": "noyb",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "",
   "main": "lib/index.js",
   "unpkg": "dist/noyb.js",
@@ -14,8 +14,8 @@
     "clean": "rimraf lib dist es",
     "lint": "eslint src --ext .js,.jsx",
     "test": "jest tests",
-    "test:watch": "npm test -- --watch",
     "coverage": "npm test -- --coverage",
+    "test:watch": "npm test -- --watch",
     "pretest": "npm run lint",
     "prepublishOnly": "npm run test && npm run build"
   },

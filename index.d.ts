@@ -4,7 +4,7 @@ declare module 'noyb' {
    * @param obj       Object to inspect for type.
    * @returns         Type of the given object.
    */
-  declare function getObjectType(obj: any): string;
+  export function getType(obj: any): string;
 
   /**
    * Queries an object for a specific value.
@@ -14,7 +14,7 @@ declare module 'noyb' {
    *                  parameter if you just want to read the property.
    * @returns         The object, part of it or a value in the object.
    */
-  declare function queryObject(query: string, obj: object, value?: any): any;
+  export function queryObject(query: string, obj: object, value?: any): any;
 
   /**
    * Updates an object by merging a fragment object into it.
@@ -22,14 +22,14 @@ declare module 'noyb' {
    * @param objB      Fragment object.
    * @returns         The updated object.
    */
-  declare function mergeObjects<T>(objA: T, objB: Partial<T>): T;
+  export function mergeObjects<T>(objA: T, objB: Partial<T>): T;
 
   /**
    * Deep-copies an object or an array.
    * @param obj       Object or Array to copy.
    * @returns         Copied Object or Array.
    */
-  declare function deepCopy<T>(obj: T): T;
+  export function deepCopy<T>(obj: T): T;
 
   /**
    * Deeply compares two objects and returns a boolean that specifies
@@ -38,7 +38,7 @@ declare module 'noyb' {
    * @param objB      Second object.
    * @returns         Result is true if the two objects are equal
    */
-  declare function deepCompare<T, U>(objA: T, objB: U): boolean;
+  export function deepCompare<T, U>(objA: T, objB: U): boolean;
 
   /**
    * Fills an object with default values.
@@ -46,5 +46,5 @@ declare module 'noyb' {
    * @param defaults  Default values object.
    * @returns         Filled object.
    */
-  declare function applyDefaults<T>(obj: Partial<T>, defaults: T): T;
+  export function applyDefaults<T>(obj: Partial<T>, defaults: T): T;
 }
